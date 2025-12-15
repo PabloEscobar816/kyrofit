@@ -1,0 +1,488 @@
+1. Core Theme Concept
+
+Pick one strong direction and commit to it:
+
+Theme: Dark Anime “Hunter” RPG (inspired by Solo Leveling-style hunters and dungeon raids)
+
+The user is a Hunter.
+
+Workouts are Raids/Dungeons.
+
+Muscle groups are Skill Trees.
+
+Nutrition/meal plans are Supply Lines or Guild Provisions.
+
+Weekly check-ins are Guild Reports.
+
+Progress metrics are Character Stats.
+
+Achievements & streaks are Titles, Badges, Artifacts.
+
+This gives you a game-like feel, but all mechanics still map to real fitness behavior.
+
+2. Visual Design System (Dark Anime)
+
+Use this as guidance for your front-end styling.
+
+Colors
+
+Background:
+
+#050712 – main background (near-black, slight blue).
+
+#090d1a – secondary background for cards.
+
+Primary accent:
+
+#7C3AED (purple) or #6366F1 (indigo) – main action color.
+
+Secondary accent:
+
+#22C55E (green) – success/“XP gained”.
+
+#FBBF24 (gold) – highlights, rank badges.
+
+Text:
+
+#F9FAFB – main text.
+
+#9CA3AF – secondary text.
+
+Danger:
+
+#EF4444 – for failed streaks, overdue check-ins.
+
+Typography
+
+Headings: geometric/sci-fi style (e.g. something like “Orbitron”-looking in your design), bold.
+
+Body: simple, readable sans-serif (e.g. Inter/Roboto).
+
+Use uppercase for game meta UI: “RAID START”, “LEVEL UP”, “RANK S”.
+
+Components
+
+Cards: Rounded corners (lg/2xl), subtle glowing border on hover (using primary accent).
+
+Buttons: Solid, gradient background (dark purple → indigo), strong hover state (brighter glow, slight scale).
+
+Progress bars: “XP bar” look:
+
+Dark track, bright gradient fill.
+
+Level number and XP fraction (Lv. 12 – 320/500 XP).
+
+Badges: Small pill-shaped tags:
+
+Gold for rank (S, A, B, C).
+
+Green for streaks (“7-Day Streak”).
+
+Iconography
+
+Use simple line icons but with a fantasy touch:
+
+Sword/shield for workouts.
+
+Heart/health for wellness.
+
+Flame for streaks.
+
+Box/crate for meal plans.
+
+3. Gamification Layer (Mechanics)
+
+Keep it simple but real:
+
+Hunter Level & XP
+
+Each completed workout = XP.
+
+Extra XP for:
+
+Hitting weekly workout target.
+
+Completing weekly check-in.
+
+Logging meals consistently.
+
+Level progression curve (e.g., Level n requires 100 × n XP).
+
+Dungeon/Raid System
+
+Each workout = “Raid”.
+
+Dungeon difficulty: Easy / Normal / Hard.
+
+Map difficulty to:
+
+Volume (sets/reps) or intensity (RPE).
+
+Show “Raid Summary” at the end:
+
+XP earned.
+
+“Damage dealt” = total volume lifted.
+
+“Monsters defeated” = number of exercises completed.
+
+Streaks & Titles
+
+Streak: days with at least one completed workout or logged movement.
+
+Award Titles:
+
+“Novice Hunter” (Lv. 1–4).
+
+“Dungeon Walker” (7+ day streak).
+
+“A-Rank Hunter” (Level threshold).
+
+Show one active Title under username.
+
+Skill Trees
+
+Optional UI:
+
+Strength, Endurance, Mobility, Nutrition as “branches”.
+
+Progress meters for each based on behavior:
+
+Strength = heavy workouts logged.
+
+Endurance = cardio sessions flagged.
+
+Nutrition = consistent meal logging.
+
+This is just a visualization of existing metrics.
+
+Meal Plan Marketplace as “Guild Provisions”
+
+Meal plan cards are “Supply Crates”.
+
+Show “Boost: +Nutrition Consistency” conceptually, but keep it cosmetic.
+
+When user clicks an affiliate link, animate like opening a crate before redirect.
+
+4. Screen-by-Screen Text Mocks
+
+You can hand these to a designer or use them mentally to structure components.
+
+4.1 Dashboard (Home)
+
+Top section:
+
+[ Username + Avatar ]
+
+Avatar: silhouette-style hunter.
+
+Underneath: Lv. 7 – A-Rank Hunter
+
+Small subtitle: “Today’s Mission Awaits”
+
+Below:
+
+Card: Today’s Raid
+
+Title: Dungeon: Iron Temple – Upper Body
+
+Subtitle: Difficulty: NORMAL · 6 Exercises · Est. 45 min
+
+Big button: START RAID
+
+Small text: +120 XP on completion
+
+Card: Hunter Stats (Mini)
+
+“Weekly XP: 480/600”
+
+“Workout Completion: 3 / 4”
+
+Horizontal XP bar.
+
+Card: Guild Provisions (Meal Highlights)
+
+“Recommended Meal Plans”
+
+2–3 horizontal cards:
+
+“High-Protein Hero Plan” – From $69/week – View
+
+“Lean Fuel Keto Crate” – From $79/week – View
+
+Card: Check-in Reminder
+
+If check-in is due:
+
+“Guild Report Due in 1 day”
+
+Button: COMPLETE CHECK-IN
+
+Bottom navigation (mobile):
+
+Home | Raids | Stats | Nutrition | Provisions
+
+4.2 Raids (Workouts List)
+
+Header:
+
+Title: Raids
+
+Subtitle: This Week’s Dungeon Schedule
+
+List items:
+
+Card per day:
+
+Mon – Dungeon: Iron Temple (Full Body) – status badge: COMPLETED
+
+Wed – Dungeon: Shadow Steps (Lower Body) – badge: READY
+
+Fri – Dungeon: Aether Forge (Push) – badge: LOCKED until date.
+
+Each card shows:
+
+Difficulty: NORMAL / HARD
+
+Reward: +90 XP
+
+Action button: ENTER DUNGEON
+
+4.3 Workout Detail (Raid Screen)
+
+Top:
+
+Dungeon: Iron Temple – Upper Body
+
+Difficulty badge: NORMAL
+
+“Estimated time: 45 min · Reward: 120 XP”
+
+Mid:
+
+Progress bar: 3 / 6 Monsters Defeated
+
+List of exercises as “monsters”:
+
+“Goblin Press (Bench Press) – 4×8”
+
+“Orc Row (Bent-Over Row) – 4×10”
+
+Each row has:
+
+Sets with inputs for weight/reps.
+
+Done checkbox.
+
+Bottom:
+
+Primary button: COMPLETE RAID
+
+If user tries to complete too early, validate that at least one set is logged.
+
+After completion, show:
+
+“Raid Cleared!”
+
++120 XP
+
+“Total Volume: 10,500 kg”
+
+“Best Set: Bench Press 185 lb x 8”
+
+4.4 Stats / Progress Screen
+
+Sections:
+
+Hunter Overview
+
+Level, XP bar, current Title.
+
+Body Stats
+
+Weight chart (last 30 days).
+
+Summary cards:
+
+“Max Bench”
+
+“Fastest 5K” (if you track cardio).
+
+Skill Trees
+
+Four circular meters:
+
+Strength 78%
+
+Endurance 52%
+
+Mobility 35%
+
+Nutrition 64%
+
+Photos
+
+Photo gallery with dark frames, date overlay.
+
+4.5 Nutrition Screen
+
+Header:
+
+Nutrition Log
+
+Today card:
+
+“Calories: 1,850 / 2,300”
+
+“Protein: 130 / 160 g”
+
+“Meals logged: 3”
+
+List of meals:
+
+Card:
+
+Name: Meal 1 – Breakfast
+
+Text: Oats, whey, berries
+
+Macro snapshot.
+
+Button:
+
+ADD MEAL (small).
+
+Link to Browse Provisions (meal plans) at bottom.
+
+4.6 Meal Plan Marketplace (“Guild Provisions”)
+
+Header:
+
+Guild Provisions
+
+Subtitle: External subscription meal plans to fuel your raids.
+
+Filters:
+
+Goal: [Fat Loss, Muscle Gain, Maintenance]
+
+Style: [High-Protein, Keto, Veg, Vegan, etc.]
+
+Price slider: $–$$$
+
+Cards:
+
+High-Protein Hero Plan
+
+Partner logo.
+
+Tags: Muscle Gain · Ready-to-eat
+
+Price: From $69/week
+
+Short description.
+
+Button: OPEN CRATE → triggers affiliate link redirect.
+
+Shadow Cut Fat Loss Pack
+
+Tags: Fat Loss · Low Carb
+
+Price: From $79/week
+
+Button: OPEN CRATE
+
+On click:
+
+Show quick micro-animation (fake crate opening overlay) then redirect to affiliate URL.
+
+4.7 Weekly Check-in (“Guild Report”)
+
+Header:
+
+Guild Report – Week of Jan 5
+
+Questions styled like a mission debrief:
+
+“Overall energy this week (1–10)”
+
+“Stress level (1–10)”
+
+“Hours slept per night (average)”
+
+“Raids completed vs assigned: [3 / 4]”
+
+“How well did you maintain your provisions?” (nutrition consistency, 1–10)
+
+“Biggest win this week?” (text)
+
+“Biggest obstacle?” (text)
+
+“Focus for next week?” (text)
+
+“Update Hunter Photos” (photo uploads)
+
+Footer:
+
+Button: SUBMIT REPORT
+
+On submit:
+
++XP and a short “Report received” animation.
+
+UI & THEME REQUIREMENTS (VERY IMPORTANT)
+
+Use a dark anime “Hunter RPG” theme inspired by Solo Leveling-style dungeon raids. The app must feel like a game visually, while still functioning as a serious fitness/nutrition tracker.
+
+VISUAL STYLE
+- Dark background: near-black with subtle blue tones.
+- Accent colors:
+  - Primary: purple/indigo for main actions.
+  - Secondary: green for success/XP gained, gold for ranks and highlights.
+- Typography:
+  - Bold, futuristic/sci-fi style headings (hunter/game feel).
+  - Clean sans-serif for body text.
+  - Use uppercase for meta labels like “RAID START”, “LEVEL UP”, “RANK A”.
+- Components:
+  - Card-based layout with rounded corners and subtle glowing borders on hover.
+  - XP-style progress bars for levels and goals.
+  - Pill badges for difficulty, rank, streaks, and tags.
+
+GAME LAYER
+- Treat the user as a “Hunter”.
+- Workouts are “Raids” or “Dungeons”.
+- Weekly check-ins are “Guild Reports”.
+- Meal plan marketplace is “Guild Provisions” with cards representing “Supply Crates”.
+- Show Hunter Level and XP in the header or dashboard.
+- Each completed workout gives XP and shows a “Raid Cleared” summary with XP, volume lifted, and completion stats.
+- Implement streaks and Titles (e.g., Novice Hunter, Dungeon Walker, A-Rank Hunter) as cosmetic achievements tied to existing metrics.
+
+SCREEN UX DETAILS
+- Dashboard:
+  - Show user avatar, Hunter Level, and Title.
+  - “Today’s Raid” card with workout name, difficulty, and big “START RAID” button.
+  - Weekly stats (XP, workout completion).
+  - Recommended meal plans under a “Guild Provisions” section.
+  - If a weekly check-in is due, show a “Guild Report Due” card with CTA.
+- Raids (Workouts):
+  - List this week’s workouts as raid cards with difficulty badges and XP rewards.
+  - Workout detail page styled as a dungeon screen, with exercises as “monsters” and a visible completion/XP bar.
+- Stats:
+  - Hunter overview with level, XP bar, and Title.
+  - Body metrics charts.
+  - Optional “Skill Tree” style visualization for Strength, Endurance, Mobility, Nutrition using radial or bar meters.
+- Nutrition:
+  - Daily log with calorie and macro targets shown as progress bars.
+  - Access to “Guild Provisions” (meal plan marketplace) from this screen.
+- Meal Plan Marketplace:
+  - Cards for external subscription meal plans with provider logo, tags, price, and CTA.
+  - Use game flavor names and subtle “crate” visuals, but keep the content transparent (clear pricing, description, external link).
+  - On click, log the click and redirect to affiliateUrl.
+- Check-ins:
+  - Week-level “Guild Report” form with rating scales and text areas, plus progress photos.
+  - Add a small XP reward and feedback screen after submission.
+
+GENERAL
+- All game elements are cosmetic wrappers over standard fitness features (workouts, logs, check-ins, progress, meal plans).
+- Prioritize clarity and usability over heavy effects: the user must always know what to do next to complete their workout, log meals, or submit a check-in.
+- Ensure the app works cleanly on mobile with a bottom navigation: Home, Raids, Stats, Nutrition, Provisions.

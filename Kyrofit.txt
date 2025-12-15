@@ -1,0 +1,511 @@
+You are building a full-stack fitness and nutrition app called **KyroFit**.
+
+KyroFit is a self-guided, AI-influenced fitness app (no live coaches, no chat) that feels engaging like a game through levels, streaks, and achievements, while still being a serious tool for training, nutrition, and progress tracking.
+
+GOAL
+Build a production-ready web app where users can:
+- Get personalized training programs.
+- Log workouts and track progress.
+- Track basic nutrition and habits.
+- Complete weekly self-check-ins.
+- Browse and choose external subscription meal plans (with affiliate links) for additional options and affiliate income.
+- Stay engaged with levels, streaks, and achievements (no fantasy dungeons/raids, just clean, techy gamification).
+
+STACK & ARCHITECTURE
+- Modern full-stack TypeScript app.
+- Next.js or similar React-based framework.
+- API layer (REST or tRPC) + ORM (Prisma or similar).
+- Relational DB (Postgres-style).
+- Authentication with email/password plus optional magic link.
+- Role-based access: USER, ADMIN.
+- Fully responsive (mobile-first).
+
+ROLES
+1) USER
+   - Regular app user.
+2) ADMIN
+   - Manages exercises, program templates, meal partners/plans, and has basic oversight.
+
+==================================================
+CORE FEATURES
+==================================================
+
+1. Training programs & exercise library (self-guided)
+- KyroFit generates or assigns training programs based on user preferences; NO human coaches.
+- Users can:
+  - See a structured training plan (e.g., 3–5 sessions per week).
+  - View “Today’s Session” and weekly schedule in a level-style UI.
+- Exercise library:
+  - Fields: name, description, primaryMuscleGroup, equipment, videoUrl, instructions/cues.
+- Training programs (templates):
+  - Goal-based templates (fat loss, strength, muscle gain, general fitness).
+  - Level-based (beginner, intermediate, advanced).
+  - Location-based (home / gym / both).
+- Personalization:
+  - Based on onboarding answers (goals, equipment, days per week).
+  - Assign a matched program template automatically to each user on onboarding.
+
+2. Workout logging (“Sessions”)
+- For each scheduled workout (Session):
+  - List exercises with sets, reps, rest, tempo, notes.
+- User can log:
+  - Weight used per set.
+  - Reps completed per set.
+  - RPE/difficulty.
+  - Notes per exercise/workout.
+- Mark a Session as completed.
+- KPIs:
+  - Completion rates (% of scheduled sessions completed last 7 / 30 days).
+  - Visual indicators for completed vs skipped sessions.
+- Simple summary at end of session:
+  - Total volume.
+  - Sets completed.
+  - Level XP gained (see game/level layer below).
+
+3. Progress tracking
+- Body metrics:
+  - Weight, waist, hips, chest, arms, and other optional fields.
+- Performance metrics:
+  - Track personal bests or derived 1RM on key lifts.
+- Progress photos:
+  - Upload front / side / back photos with date.
+- Visualizations:
+  - Charts (line graphs) for weight and other metrics.
+  - Progress timeline combining key stats and check-ins.
+- Adherence:
+  - Calendar/heatmap showing on which days workouts were completed.
+
+4. Nutrition tracking (basic)
+- Daily logging:
+  - User logs meals with description, optional macros (calories, protein, carbs, fats), and optional image.
+- Daily summary:
+  - Total logged calories/macros vs user’s targets.
+  - “On track / under / over” evaluation based on target ranges.
+- Targets:
+  - User-configurable daily calorie target and macro distribution.
+- Purpose:
+  - Self-tracking only; no live coach review.
+
+5. External subscription meal plans (affiliate-based “Kyro Fuel Packs”)
+- KyroFit integrates external meal subscription services as “Kyro Fuel Packs” to give users more options and generate affiliate income.
+- “Kyro Fuel Packs” marketplace:
+  - Filter by:
+    - Goal: fat loss, muscle gain, maintenance.
+    - Dietary style: high-protein, keto, vegetarian, vegan, etc.
+    - Price range (per week / per month).
+  - Each meal plan card:
+    - Provider name (partner).
+    - Plan name.
+    - Short description.
+    - Goal type, dietary style tags.
+    - Starting price (e.g., “From $69/week”).
+    - High-level overview of the weekly menu or approach.
+    - Tags (e.g., “Ready-to-eat”, “Meal kits”, “Family friendly”).
+    - Clear CTA: “View Fuel Pack” / “Go to Provider.”
+    - Underlying affiliateUrl for external redirect.
+- Plan detail page (inside KyroFit):
+  - Full description.
+  - More detailed info: shipping, frequency, basic FAQ (stored in DB).
+  - Strong CTA button using affiliateUrl.
+  - Clear note that the user will be redirected off KyroFit.
+- Affiliate click tracking:
+  - For each click, log userId (if logged in), mealPlanId, timestamp, and referrerPage in a dedicated table.
+- “Saved Fuel Packs”:
+  - Users can bookmark/save plans for later.
+
+6. Weekly self-check-ins (“Weekly Review” / “Checkpoint”)
+- Once per week (or user-configurable interval), prompt users to complete a self-review:
+  - Energy level (1–10).
+  - Stress level (1–10).
+  - Average sleep hours.
+  - Sessions completed vs assigned for that week.
+  - Self-rated nutrition consistency (1–10).
+  - Free-text fields:
+    - Biggest win this week.
+    - Main obstacle this week.
+    - Focus for next week.
+  - Option to upload/update progress photos.
+- Store check-in history:
+  - Timeline of Weekly Reviews with key summary stats per week.
+- This is a self-awareness tool only; no coach replies.
+
+7. User onboarding (self-guided)
+- Sign up:
+  - Email, password (or magic link), create account as USER.
+- On first login:
+  - Multi-step onboarding questionnaire:
+    - Sex, age (optional), height, current weight.
+    - Main goal: fat loss, muscle gain, recomposition, performance, general health.
+    - Training experience: beginner / intermediate / advanced.
+    - Training location: home / gym / both.
+    - Available equipment (checkbox list).
+    - Days per week available for training (1–7).
+    - Nutrition preferences:
+      - Dietary style (keto, vegetarian, vegan, etc.).
+      - Allergies/intolerances (free text).
+      - Budget preference for meal plans (low/medium/high).
+- Post-onboarding:
+  - Assign a default program template (UserProgram) that matches the user.
+  - On dashboard, show:
+    - “Today’s Level” session.
+    - A few recommended Kyro Fuel Packs based on goal and dietary preferences.
+
+8. Notifications & reminders
+- Notifications (in-app + email where enabled):
+  - Daily reminder if a workout is scheduled today and not completed.
+  - Weekly reminder to complete the Weekly Review / Checkpoint.
+  - Optional reminder for meal logging if the user has used nutrition tracking recently.
+- Notification preferences:
+  - Users can toggle email notifications for:
+    - Sessions (workouts).
+    - Checkpoints (weekly reviews).
+    - General product updates.
+
+9. Admin panel
+- ADMIN capabilities:
+  - User management:
+    - View/search users.
+    - Activate/deactivate accounts.
+    - Change role (USER/ADMIN).
+  - Exercise library:
+    - CRUD for exercises.
+  - Program templates:
+    - CRUD for ProgramTemplates, WorkoutTemplates, and WorkoutExerciseTemplates.
+  - Meal partners & meal plans:
+    - CRUD for MealPartner, MealPlan, MealPlanAffiliate (affiliate URLs, tags, pricing).
+    - View basic stats: click counts per meal plan/partner.
+  - Analytics:
+    - Number of active users.
+    - Sessions completed per day/week.
+    - Weekly Reviews submitted.
+    - Fuel Pack clicks.
+
+==================================================
+KYROFIT GAME / LEVEL / ACHIEVEMENT LAYER
+==================================================
+
+KyroFit uses a modern, AI/tech/gamified theme: users “Level Up” their real-life fitness through consistent behavior.
+
+1. Levels & XP
+- Each user has:
+  - `level` (integer).
+  - `currentXp` and `xpToNextLevel`.
+- XP sources (example logic, you can implement server-side):
+  - Completing a Session (workout).
+  - Hitting weekly session target.
+  - Completing a Weekly Review.
+  - Logging meals consistently (e.g., hitting daily log targets).
+- Use a simple leveling curve (e.g., Level n requires 100 × n XP, or any clean formula).
+- When XP crosses threshold, level up and show a “Level Up” UI.
+
+2. Phases (based on level bands)
+- Cosmetic label based on level:
+  - Levels 1–4: “Starter Phase”
+  - Levels 5–9: “Builder Phase”
+  - Levels 10–14: “Momentum Phase”
+  - Levels 15–19: “Control Phase”
+  - Level 20+: “Peak Phase”
+- Example display:
+  - `Level 7 – Builder Phase`
+  - `Level 16 – Control Phase`
+
+3. Rank labels (optional cosmetic ranks)
+- Additional label tied to performance metrics/streaks:
+  - Rank C: “Getting Started”
+  - Rank B: “On Track”
+  - Rank A: “Locked In”
+  - Rank S: “Peak Form”
+- Example UI text: `Rank A – Locked In`.
+
+4. Streaks
+- Track streaks for:
+  - Consecutive days with at least one session completed or movement logged.
+- Named streaks (based on streak length):
+  - 3 days: “Spark Streak”
+  - 7 days: “Solid Week”
+  - 14 days: “Consistency Run”
+  - 21 days: “Habits Online”
+  - 30 days: “Unbreakable Month”
+  - 90 days: “Lifetime Shift”
+- UI example: `Streak: 14 days – Consistency Run`.
+
+5. Achievements / Badges
+- Achievements triggered by reaching certain behavior thresholds.
+- Examples (implement as Achievements table or simple rules):
+
+Consistency:
+- “First Step Logged” – first session completed.
+- “Week One Done” – 3+ sessions in a week.
+- “No Miss Week” – all scheduled sessions completed in a week.
+- “Lock-In Mode” – 14-day streak.
+- “Always Showing Up” – 30-day streak.
+- “Consistency Machine” – 90+ active days in a year.
+
+Training/Strength:
+- “First Level Cleared” – first full program week done.
+- “Forming Iron” – 10 strength sessions completed.
+- “Volume Builder” – total training volume surpasses a defined threshold.
+- “Endurance Online” – 10 cardio sessions.
+- “Power Milestone” – set a new personal best.
+- “Upgrade Complete” – increased weights on at least 3 exercises in one week.
+
+Nutrition:
+- “Fuel Logged” – first full day of meal logging.
+- “Fuel Week” – 7 consecutive days logging meals.
+- “Macro Aware” – macros logged for 20 meals.
+- “On-Target Day” – macros inside target range.
+- “Fuel Discipline” – 14 days within targets.
+- “Fuel Pro” – 50 days with any meals logged.
+
+Meal Plans (affiliate):
+- “Fuel Pack Explorer” – viewed 3 different Kyro Fuel Packs.
+- “Fuel Pack User” – clicked a Fuel Pack affiliate link.
+
+Mindset/Check-ins:
+- “First Checkpoint” – first Weekly Review completed.
+- “Review Regular” – 4 weekly reviews in a row.
+- “Honest Review” – check-in with both Wins and Obstacles filled.
+- “Future Focused” – 10 Weekly Reviews.
+- “Growth Mindset” – 8+ Weekly Reviews in a row.
+
+Show achievements as badges with short labels and descriptions in a dedicated Achievements/Badges screen.
+
+==================================================
+DATA MODEL (GUIDE)
+==================================================
+
+Design a relational schema such as:
+
+- User
+  - id, name, email, passwordHash, role (USER/ADMIN), createdAt, updatedAt.
+
+- UserProfile
+  - id, userId (FK), sex, dateOfBirth, height, currentWeight, goal, trainingExperience,
+    trainingLocation, daysPerWeek, equipment (JSON or text), dietaryStyle, allergies,
+    mealBudgetPreference, createdAt, updatedAt.
+
+- Exercise
+  - id, name, description, primaryMuscleGroup, equipment, videoUrl, createdAt, updatedAt.
+
+- ProgramTemplate
+  - id, name, description, goal, level, trainingLocation, isDefault (boolean), createdAt, updatedAt.
+
+- WorkoutTemplate
+  - id, programTemplateId, name, dayOfWeek or orderIndex, notes.
+
+- WorkoutExerciseTemplate
+  - id, workoutTemplateId, exerciseId, sets, reps, restSeconds, tempo, notes, orderIndex.
+
+- UserProgram
+  - id, userId, programTemplateId, startDate, endDate, isActive.
+
+- WorkoutInstance
+  - id, userProgramId, workoutTemplateId, scheduledDate, status (PENDING/COMPLETED/SKIPPED).
+
+- WorkoutLog
+  - id, userId, workoutInstanceId, performedAt, notes, completed (boolean).
+
+- WorkoutSetLog
+  - id, workoutLogId, exerciseId, setNumber, weight, reps, rpe, notes.
+
+- ProgressMetric
+  - id, userId, date, weight, waist, hips, chest, arms, otherFields (JSON).
+
+- ProgressPhoto
+  - id, userId, date, frontImageUrl, sideImageUrl, backImageUrl, notes.
+
+- MealLog
+  - id, userId, dateTime, description, calories, protein, carbs, fats, imageUrl.
+
+- CheckIn
+  - id, userId, weekOf (date), energy, stress, sleepHours, workoutsCompleted,
+    nutritionConsistency, winsText, strugglesText, focusNextWeekText, createdAt.
+
+- MealPartner
+  - id, name, websiteUrl, description, logoUrl, createdAt, updatedAt.
+
+- MealPlan
+  - id, partnerId, name, description, goalType, dietaryStyle,
+    pricePerWeek, pricePerMonth, isActive, sampleMenu (JSON or text), shippingInfo (text),
+    faq (text), createdAt, updatedAt.
+
+- MealPlanAffiliate
+  - id, mealPlanId, affiliateUrl, utmSource, utmMedium, utmCampaign, trackingCode,
+    isActive, createdAt, updatedAt.
+
+- MealPlanClick
+  - id, userId (nullable), mealPlanId, affiliateId (nullable), clickedAt, referrerPage.
+
+- Notification
+  - id, userId, type, data (JSON), isRead, createdAt.
+
+- UserLevel
+  - id, userId, level, currentXp, xpToNextLevel, createdAt, updatedAt.
+
+- Streak
+  - id, userId, currentStreakDays, longestStreakDays, lastActiveDate, createdAt, updatedAt.
+
+- Achievement
+  - id, code, name, description, category (consistency/training/nutrition/mindset/meal),
+    createdAt, updatedAt.
+
+- UserAchievement
+  - id, userId, achievementId, unlockedAt.
+
+==================================================
+PAGES / SCREENS & UI TEXT
+==================================================
+
+Use a **dark, techy, anime-influenced** style with subtle futuristic vibes. Dark background, bright accent colors, level bars, and clean card layouts. Avoid fantasy/dungeon imagery; focus on levels, streaks, and performance.
+
+GENERAL VISUAL STYLE
+- Dark theme: near-black backgrounds with subtle blue tones.
+- Accent colors:
+  - Primary: purple/indigo for main actions.
+  - Secondary: green for success, gold for highlights and ranks.
+- Typography:
+  - Bold, modern headings for titles.
+  - Clean sans-serif body.
+  - Use uppercase for key labels like “LEVEL UP”, “STREAK ACTIVE”.
+- Components:
+  - Rounded cards with subtle glows on hover.
+  - XP-style progress bars for levels, daily goals, and streaks.
+  - Pill badges for rank, phase, streak names, and tags.
+
+USER-FACING SCREENS
+
+1. Dashboard (Home) – “KyroFit Control Center”
+- Show:
+  - User’s name, avatar, and main header:
+    - `Level 7 – Builder Phase`
+    - `Rank A – Locked In`
+  - XP bar: `320 / 500 XP` to next level.
+- Sections:
+  - “Today’s Level” / “Today’s Session”
+    - Session name, target muscle focus, estimated time, completion status.
+    - CTA: “Start Session”.
+  - Weekly overview:
+    - Sessions completed vs planned (e.g., `3 / 4 this week`).
+    - Quick summary of streak (e.g., `Streak: 5 days – Spark Streak`).
+  - Progress snapshot:
+    - Small card with recent weight trend.
+  - Kyro Fuel Packs suggestions:
+    - 2–3 recommended meal plans based on goal/diet.
+  - Checkpoint reminder:
+    - If Weekly Review is due, show a card: “Weekly Review due in X days” with CTA: “Complete Checkpoint”.
+
+2. Sessions / Workouts – “Sessions” or “Training Levels”
+- Show upcoming and past Sessions:
+  - Date, name, target body parts, status (Pending / Completed / Skipped).
+  - Tags: intensity, estimated time, XP reward.
+- Session detail:
+  - Exercises list with sets/reps and video.
+  - Inputs for logging weight/reps/RPE.
+  - Progress indicator: `3 / 6 exercises complete`.
+  - Button: “Complete Session”.
+  - On completion:
+    - “Session Complete” modal:
+      - XP gained.
+      - Updated level and XP bar.
+      - Key stats (volume, sets done).
+
+3. Progress – “Progress Matrix”
+- Tabs or sections:
+  - Body Metrics:
+    - Weight chart, other measurements, summary cards.
+  - Performance:
+    - PBs, volume totals, graphs.
+  - Photos:
+    - Gallery with date overlays.
+  - Streaks & Levels:
+    - Streak status, longest streak.
+    - Current level, phase, and any recent achievements unlocked.
+
+4. Nutrition – “Kyro Fuel”
+- Daily Fuel summary:
+  - Calories and macros vs target (progress bars).
+  - “On Track / Under / Over” indicator.
+- Meals list:
+  - Cards for each meal with macro summary and note.
+- Actions:
+  - “Add Meal”.
+  - Link/button to “Kyro Fuel Packs” (meal plan marketplace).
+
+5. Meal Plan Marketplace – “Kyro Fuel Packs”
+- Listing page:
+  - Filters: Goal, dietary style, price range.
+  - Cards for each meal plan with:
+    - Partner logo, name.
+    - Tags and goal type.
+    - Short description.
+    - Price from $X/week.
+    - CTA: “View Fuel Pack”.
+- Detail page:
+  - Extended plan description, sample menu, shipping info, FAQ.
+  - Big CTA: “Go to Provider” using affiliate URL.
+  - Log click in MealPlanClick, then redirect.
+
+6. Weekly Review – “Checkpoint” / “Weekly Review”
+- Form:
+  - Rating fields (energy, stress, sleep, nutrition consistency).
+  - Sessions completed vs assigned.
+  - Free text: wins, obstacles, focus next week.
+  - Option to add/update progress photos.
+- On submit:
+  - Award XP.
+  - Show short “Checkpoint Complete” feedback and any new achievements.
+
+7. Achievements / Streaks – “Achievements” / “Kyro Titles”
+- List of unlocked and locked achievements.
+- Show:
+  - Badge icon, name, description, date unlocked.
+- Streak card:
+  - Current streak name (e.g., “Consistency Run”) and days.
+  - Longest streak.
+
+8. Profile & Settings
+- Edit personal info, units, goals.
+- Adjust workout preferences and notification settings.
+
+ADMIN SCREENS
+- Admin Dashboard:
+  - Cards: active users, sessions logged, Weekly Reviews, Fuel Pack clicks.
+- Users:
+  - Table; search, filter; ability to toggle active and roles.
+- Exercises:
+  - CRUD table (name, type, muscle group, etc.).
+- Program Templates:
+  - List/CRUD; attach WorkoutTemplates and WorkoutExerciseTemplates.
+- Meal Partners & Fuel Packs:
+  - CRUD MealPartner, MealPlan, MealPlanAffiliate.
+  - Stats overview of clicks per plan.
+
+==================================================
+NON-FUNCTIONAL REQUIREMENTS
+==================================================
+
+- Secure password storage and proper auth guards on backend routes.
+- All authenticated pages must be protected.
+- Users can only access and modify their own data.
+- API design should be clean enough so a future mobile app can reuse it.
+- Prioritize performance and simple, clear UX over excessive visual effects.
+
+==================================================
+DELIVERABLE
+==================================================
+
+Generate all required code and files so that:
+
+- A USER can:
+  - Sign up, complete onboarding, receive a personalized training program.
+  - View “Today’s Session”, run a session, log sets and reps, and complete sessions for XP.
+  - Track body metrics, performance, and photos.
+  - Log meals, view daily fuel summary, and explore Kyro Fuel Packs.
+  - Complete Weekly Reviews, see streaks, level, phase, rank, and achievements.
+
+- An ADMIN can:
+  - Manage users, exercises, and program templates.
+  - Manage meal partners, Fuel Packs, and affiliate links.
+  - View basic analytics including Fuel Pack click tracking.
+
+Make KyroFit feel like a modern, dark, AI-inspired fitness platform with clear gamification (levels, streaks, achievements) but without fantasy or dungeon/raid imagery.
